@@ -28,6 +28,16 @@ namespace MovieApi
 
             builder.Services.AddControllers();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowClient", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddApiVersioning(options =>
             {
                 options.AssumeDefaultVersionWhenUnspecified = true;
@@ -103,6 +113,8 @@ namespace MovieApi
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("AllowClient");
 
             app.UseAuthentication();
             app.UseAuthorization();
