@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
-import type { Movie, MovieInput } from './types'
+import { useEffect, useRef, useState } from 'react'
+import { getGenres } from './api'
+import type { Genre, Movie, MovieInput } from './types'
 
 const emptyForm: MovieInput = {
   title: '',
@@ -16,8 +17,27 @@ interface MovieFormProps {
 
 function MovieForm({ editingMovie, onSubmit, onCancelEdit }: MovieFormProps) {
   const [form, setForm] = useState<MovieInput>(emptyForm)
+  const [genres, setGenres] = useState<Genre[]>([])
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [genreMenuOpen, setGenreMenuOpen] = useState(false)
+  const genreMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    getGenres()
+      .then(setGenres)
+      .catch((err) => setError(err instanceof Error ? err.message : 'Kunde inte hämta genrer'))
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (genreMenuRef.current && !genreMenuRef.current.contains(e.target as Node)) {
+        setGenreMenuOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   useEffect(() => {
     if (editingMovie) {
@@ -68,7 +88,7 @@ function MovieForm({ editingMovie, onSubmit, onCancelEdit }: MovieFormProps) {
         Titel
         <input
           type="text"
-          className="rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-purple-500 focus:outline-none"
+          className="rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-white focus:outline-none"
           value={form.title}
           onChange={(e) => handleChange('title', e.target.value)}
           required
@@ -79,7 +99,7 @@ function MovieForm({ editingMovie, onSubmit, onCancelEdit }: MovieFormProps) {
         År
         <input
           type="number"
-          className="rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-purple-500 focus:outline-none"
+          className="rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-white focus:outline-none"
           value={form.year}
           onChange={(e) => handleChange('year', e.target.value)}
           min={1888}
@@ -92,7 +112,7 @@ function MovieForm({ editingMovie, onSubmit, onCancelEdit }: MovieFormProps) {
         Speltid (min)
         <input
           type="number"
-          className="rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-purple-500 focus:outline-none"
+          className="rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-white focus:outline-none"
           value={form.duration}
           onChange={(e) => handleChange('duration', e.target.value)}
           min={1}
@@ -102,15 +122,39 @@ function MovieForm({ editingMovie, onSubmit, onCancelEdit }: MovieFormProps) {
       </label>
 
       <label className="flex flex-col gap-1 text-sm text-gray-300">
-        GenreId
-        <input
-          type="number"
-          className="rounded border border-gray-600 bg-gray-900 px-3 py-2 text-sm text-gray-100 focus:border-purple-500 focus:outline-none"
-          value={form.genreId}
-          onChange={(e) => handleChange('genreId', e.target.value)}
-          min={1}
-          required
-        />
+        Genre
+        <div className="relative" ref={genreMenuRef}>
+          <button
+            type="button"
+            className="flex w-full items-center justify-between rounded border border-gray-600 bg-gray-900 px-3 py-2 text-left text-sm text-gray-100 focus:border-white focus:outline-none"
+            onClick={() => setGenreMenuOpen((open) => !open)}
+          >
+            <span className={form.genreId ? '' : 'text-gray-500'}>
+              {genres.find((genre) => genre.id === form.genreId)?.name ?? 'Välj genre'}
+            </span>
+            <span className="ml-2 text-gray-500">▾</span>
+          </button>
+          {genreMenuOpen && (
+            <ul className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded border border-gray-600 bg-gray-900 text-sm text-gray-100 shadow-lg">
+              {genres.map((genre) => (
+                <li key={genre.id}>
+                  <button
+                    type="button"
+                    className={`block w-full px-3 py-2 text-left hover:bg-gray-700 ${
+                      genre.id === form.genreId ? 'bg-gray-700' : ''
+                    }`}
+                    onClick={() => {
+                      handleChange('genreId', String(genre.id))
+                      setGenreMenuOpen(false)
+                    }}
+                  >
+                    {genre.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </label>
 
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -119,7 +163,7 @@ function MovieForm({ editingMovie, onSubmit, onCancelEdit }: MovieFormProps) {
         <button
           type="submit"
           disabled={submitting}
-          className="rounded bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-50"
+          className="rounded bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
         >
           {editingMovie ? 'Spara' : 'Lägg till'}
         </button>

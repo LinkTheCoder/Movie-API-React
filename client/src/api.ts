@@ -1,6 +1,7 @@
-import type { Movie, MovieInput } from './types'
+import type { Genre, Movie, MovieInput } from './types'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5205/api/v1/movies'
+const GENRES_API_URL = import.meta.env.VITE_GENRES_API_URL ?? 'http://localhost:5205/api/v1/genres'
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -17,6 +18,10 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 export function getMovies(): Promise<Movie[]> {
   return fetch(API_URL).then((res) => handleResponse<Movie[]>(res))
+}
+
+export function getGenres(): Promise<Genre[]> {
+  return fetch(GENRES_API_URL).then((res) => handleResponse<Genre[]>(res))
 }
 
 export function createMovie(movie: MovieInput): Promise<Movie> {

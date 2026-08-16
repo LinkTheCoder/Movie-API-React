@@ -14,13 +14,30 @@ namespace MovieApi.Extensions
             if (await context.Genres.AnyAsync()) return;
 
             // ── Genres ────────────────────────────────────────────────────────
-            var action   = new Genre { Name = "Action" };
-            var drama    = new Genre { Name = "Drama" };
-            var sciFi    = new Genre { Name = "Sci-Fi" };
-            var thriller = new Genre { Name = "Thriller" };
-            var crime    = new Genre { Name = "Crime" };
+            var action     = new Genre { Name = "Action" };
+            var drama      = new Genre { Name = "Drama" };
+            var sciFi      = new Genre { Name = "Sci-Fi" };
+            var thriller   = new Genre { Name = "Thriller" };
+            var crime      = new Genre { Name = "Crime" };
+            var comedy     = new Genre { Name = "Comedy" };
+            var horror     = new Genre { Name = "Horror" };
+            var romance    = new Genre { Name = "Romance" };
+            var fantasy    = new Genre { Name = "Fantasy" };
+            var animation  = new Genre { Name = "Animation" };
+            var adventure  = new Genre { Name = "Adventure" };
+            var mystery    = new Genre { Name = "Mystery" };
+            var documentary = new Genre { Name = "Documentary" };
+            var family     = new Genre { Name = "Family" };
+            var musical    = new Genre { Name = "Musical" };
+            var war        = new Genre { Name = "War" };
+            var western    = new Genre { Name = "Western" };
+            var historical = new Genre { Name = "Historical" };
 
-            await context.Genres.AddRangeAsync(action, drama, sciFi, thriller, crime);
+            await context.Genres.AddRangeAsync(
+                action, drama, sciFi, thriller, crime,
+                comedy, horror, romance, fantasy, animation,
+                adventure, mystery, documentary, family, musical,
+                war, western, historical);
             await context.SaveChangesAsync();
 
             // ── Actors ────────────────────────────────────────────────────────
