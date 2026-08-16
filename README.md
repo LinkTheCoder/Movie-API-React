@@ -112,7 +112,7 @@ Projektet `TestingMovieWebApi` innehåller enhetstester för `MoviesController` 
 Klienten (`client/`) är en **Vite + React + TypeScript**-app med **Tailwind CSS**, som stödjer full CRUD mot `/api/v1/movies`:
 
 - **Read**: Hämtar och listar alla filmer vid sidladdning.
-- **Create**: Formulär för Titel, År, Speltid och GenreId som postar en ny film.
+- **Create**: Formulär för Titel, År, Speltid och Genre som postar en ny film.
 - **Update**: "Redigera"-knapp fyller i formuläret och skickar en PUT vid spar.
 - **Delete**: "Ta bort"-knapp tar bort filmen direkt via DELETE.
 
