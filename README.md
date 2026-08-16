@@ -5,6 +5,8 @@
 
 Ett RESTful Web API byggt med **ASP.NET Core (.NET 10)** och **Entity Framework Core**, som använder **SQL Server** som databas. Stödjer **JWT-autentisering**, **API-versionering** och **Swagger UI**. Inkluderar även enhetstester med **xUnit**.
 
+Projektet innehåller även en **React-klient** (`client/`) byggd med **Vite**, **TypeScript** och **Tailwind CSS** som kommunicerar med API:et via CRUD-anrop.
+
 ---
 
 ## 🧱 Teknikstack
@@ -21,6 +23,10 @@ Ett RESTful Web API byggt med **ASP.NET Core (.NET 10)** och **Entity Framework 
 | System.IdentityModel.Tokens.Jwt | 8.19.1 |
 | xUnit | 2.9.3 |
 | Moq | 4.20.72 |
+| React | 19.2 |
+| Vite | 8.2 |
+| TypeScript | 6.0 |
+| Tailwind CSS | 4.x |
 
 ---
 
@@ -98,6 +104,36 @@ Alla endpoints är versionshanterade under `/api/v1/`.
 ## 🧪 Testning
 
 Projektet `TestingMovieWebApi` innehåller enhetstester för `MoviesController` med hjälp av **xUnit** och **Moq**.
+
+---
+
+## 💻 React-klient
+
+Klienten (`client/`) är en **Vite + React + TypeScript**-app med **Tailwind CSS**, som stödjer full CRUD mot `/api/v1/movies`:
+
+- **Read**: Hämtar och listar alla filmer vid sidladdning.
+- **Create**: Formulär för Titel, År, Speltid och GenreId som postar en ny film.
+- **Update**: "Redigera"-knapp fyller i formuläret och skickar en PUT vid spar.
+- **Delete**: "Ta bort"-knapp tar bort filmen direkt via DELETE.
+
+### Köra klienten
+
+```powershell
+cd client
+npm install
+npm run dev
+```
+
+Klienten körs på `http://localhost:5173` och förväntar sig att API:et körs på `http://localhost:5205`. 
+API:ets CORS-policy (`AllowClient`) tillåter redan denna origin.
+
+### Köra API:et
+
+```powershell
+dotnet run --project MovieApi.csproj
+```
+
+Swagger UI nås på `https://localhost:7055/swagger` (eller motsvarande HTTP-port) i utvecklingsmiljö.
 
 ---
 
