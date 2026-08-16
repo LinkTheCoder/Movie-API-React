@@ -48,7 +48,7 @@ function App() {
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-8 text-left">
-      <h1 className="mb-6 text-3xl font-semibold text-gray-100">Movie API</h1>
+      <h1 className="mb-6 text-3xl font-bold text-gray-100 text-center">Movie API</h1>
 
       <MovieForm
         editingMovie={editingMovie}
