@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieApi.Data;
 using MovieApi.DTOs;
+using MovieApi.Models;
 
 namespace MovieApi.Controllers
 {
@@ -68,6 +69,39 @@ namespace MovieApi.Controllers
                 Comment      = review.Comment,
                 Rating       = review.Rating
             };
+        }
+
+        /// <summary>Skapar en ny recension för en film.</summary>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ReviewDto>> PostReview(int movieId, ReviewCreateDto dto)
+        {
+            var movieExists = await _context.Movies.AnyAsync(m => m.Id == movieId);
+            if (!movieExists)
+                return NotFound($"Film med id {movieId} finns inte.");
+
+            var review = new Review
+            {
+                MovieId      = movieId,
+                ReviewerName = dto.ReviewerName,
+                Comment      = dto.Comment,
+                Rating       = dto.Rating
+            };
+
+            _context.Reviews.Add(review);
+            await _context.SaveChangesAsync();
+
+            var result = new ReviewDto
+            {
+                Id           = review.Id,
+                ReviewerName = review.ReviewerName,
+                Comment      = review.Comment,
+                Rating       = review.Rating
+            };
+
+            return CreatedAtAction(nameof(GetReview), new { movieId, id = review.Id }, result);
         }
     }
 }

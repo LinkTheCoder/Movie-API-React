@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Movie } from './types'
 
 interface MovieListProps {
@@ -25,7 +26,11 @@ function MovieList({ movies, onEdit, onDelete }: MovieListProps) {
       <tbody>
         {movies.map((movie) => (
           <tr key={movie.id}>
-            <td className="border-b border-gray-800 p-2.5 text-gray-100">{movie.title}</td>
+            <td className="border-b border-gray-800 p-2.5 text-gray-100">
+              <Link to={`/movies/${movie.id}`} className="text-gray-100 underline hover:text-white">
+                {movie.title}
+              </Link>
+            </td>
             <td className="border-b border-gray-800 p-2.5 text-gray-100">{movie.year}</td>
             <td className="border-b border-gray-800 p-2.5 text-gray-100">{movie.genre}</td>
             <td className="border-b border-gray-800 p-2.5 text-gray-100">{movie.duration} min</td>

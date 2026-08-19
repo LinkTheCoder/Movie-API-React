@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
 import { createMovie, deleteMovie, getMovies, updateMovie } from './api'
+import MovieDetail from './MovieDetail'
 import MovieForm from './MovieForm'
 import MovieList from './MovieList'
 import type { Movie, MovieInput } from './types'
@@ -50,19 +52,29 @@ function App() {
     <main className="mx-auto max-w-3xl px-5 py-8 text-left">
       <h1 className="mb-6 text-3xl font-bold text-gray-100 text-center">Movie API</h1>
 
-      <MovieForm
-        editingMovie={editingMovie}
-        onSubmit={handleCreateOrUpdate}
-        onCancelEdit={() => setEditingMovie(null)}
-      />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <MovieForm
+                editingMovie={editingMovie}
+                onSubmit={handleCreateOrUpdate}
+                onCancelEdit={() => setEditingMovie(null)}
+              />
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+              {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
 
-      {loading ? (
-        <p className="mt-6 text-gray-400">Laddar filmer...</p>
-      ) : (
-        <MovieList movies={movies} onEdit={setEditingMovie} onDelete={handleDelete} />
-      )}
+              {loading ? (
+                <p className="mt-6 text-gray-400">Laddar filmer...</p>
+              ) : (
+                <MovieList movies={movies} onEdit={setEditingMovie} onDelete={handleDelete} />
+              )}
+            </>
+          }
+        />
+        <Route path="/movies/:id" element={<MovieDetail />} />
+      </Routes>
     </main>
   )
 }
