@@ -24,6 +24,7 @@ Projektet innehåller även en **React-klient** (`client/`) byggd med **Vite**, 
 | xUnit | 2.9.3 |
 | Moq | 4.20.72 |
 | React | 19.2 |
+| React Router | 7.x |
 | Vite | 8.2 |
 | TypeScript | 6.0 |
 | Tailwind CSS | 4.x |
@@ -84,6 +85,7 @@ Alla endpoints är versionshanterade under `/api/v1/`.
 |--------|----------|--------------|
 | `GET` | `/api/v1/movies/{movieId}/reviews` | `?minRating=` `?maxRating=` |
 | `GET` | `/api/v1/movies/{movieId}/reviews/{id}` | |
+| `POST` | `/api/v1/movies/{movieId}/reviews` | |
 
 ### Skådespelare
 
@@ -109,12 +111,16 @@ Projektet `TestingMovieWebApi` innehåller enhetstester för `MoviesController` 
 
 ## 💻 React-klient
 
-Klienten (`client/`) är en **Vite + React + TypeScript**-app med **Tailwind CSS**, som stödjer full CRUD mot `/api/v1/movies`:
+Klienten (`client/`) är en **Vite + React + TypeScript**-app med **Tailwind CSS** och **React Router**, som stödjer full CRUD mot `/api/v1/movies` samt navigering mellan flera sidor:
 
 - **Read**: Hämtar och listar alla filmer vid sidladdning.
 - **Create**: Formulär för Titel, År, Speltid och Genre som postar en ny film.
 - **Update**: "Redigera"-knapp fyller i formuläret och skickar en PUT vid spar.
 - **Delete**: "Ta bort"-knapp tar bort filmen direkt via DELETE.
+
+- **Navigering**: Filmtitlar på startsidan (`/`) länkar till en detaljsida på `/movies/:id` via React Router.
+- **Detaljvy**: Detaljsidan hämtar filmens synopsis, budget, språk, skådespelare och recensioner via `GET /api/v1/movies/{id}/details`.
+- **Skriv recension**: Ett formulär längst ner på detaljsidan låter användaren ange namn, betyg (1-5) och kommentar, och postar recensionen till `POST /api/v1/movies/{movieId}/reviews`.
 
 ### Köra klienten
 

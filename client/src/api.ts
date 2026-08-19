@@ -1,4 +1,4 @@
-import type { Genre, Movie, MovieInput } from './types'
+import type { Genre, Movie, MovieDetail, MovieInput, Review, ReviewInput } from './types'
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:5205/api/v1/movies'
 const GENRES_API_URL = import.meta.env.VITE_GENRES_API_URL ?? 'http://localhost:5205/api/v1/genres'
@@ -44,4 +44,16 @@ export function deleteMovie(id: number): Promise<void> {
   return fetch(`${API_URL}/${id}`, {
     method: 'DELETE',
   }).then((res) => handleResponse<void>(res))
+}
+
+export function getMovieDetails(id: number): Promise<MovieDetail> {
+  return fetch(`${API_URL}/${id}/details`).then((res) => handleResponse<MovieDetail>(res))
+}
+
+export function createReview(movieId: number, review: ReviewInput): Promise<Review> {
+  return fetch(`${API_URL}/${movieId}/reviews`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(review),
+  }).then((res) => handleResponse<Review>(res))
 }
