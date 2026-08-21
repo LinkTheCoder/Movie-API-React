@@ -122,6 +122,21 @@ Klienten (`client/`) är en **Vite + React + TypeScript**-app med **Tailwind CSS
 - **Detaljvy**: Detaljsidan hämtar filmens synopsis, budget, språk, skådespelare och recensioner via `GET /api/v1/movies/{id}/details`.
 - **Skriv recension**: Ett formulär längst ner på detaljsidan låter användaren ange namn, betyg (1-5) och kommentar, och postar recensionen till `POST /api/v1/movies/{movieId}/reviews`.
 
+### Layout & navigering
+
+Appen använder en gemensam `Layout`-komponent (`client/src/Layout.tsx`) med en navbar som visas på alla sidor. 
+
+### Inloggning (JWT)
+
+Klienten har stöd för inloggning mot API:ets JWT-endpoint:
+
+- **`client/src/AuthContext.tsx`**: React-context som sparar token och användarnamn i `localStorage`, och exponerar `login`, `logout` samt `isAuthenticated`.
+- **`client/src/Login.tsx`**: Inloggningssida på `/login` med formulär för användarnamn/lösenord som anropar `POST /api/v1/auth/login`.
+- **Navbar**: Visar en "Logga in"-knapp när användaren är utloggad, eller användarnamn + "Logga ut"-knapp när inloggad.
+- Vid lyckad inloggning skickas JWT-token automatiskt som `Authorization: Bearer <token>`-header på alla skapande/uppdaterande/borttagande anrop (`createMovie`, `updateMovie`, `deleteMovie`, `createReview`).
+
+> Demo-inloggning: användarnamn `admin`, lösenord `hemligt`.
+
 ### Köra klienten
 
 ```powershell

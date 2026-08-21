@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { createMovie, deleteMovie, getMovies, updateMovie } from './api'
+import Layout from './Layout'
+import Login from './Login'
 import MovieDetail from './MovieDetail'
 import MovieForm from './MovieForm'
 import MovieList from './MovieList'
@@ -49,12 +51,10 @@ function App() {
   }
 
   return (
-    <main className="mx-auto max-w-3xl px-5 py-8 text-left">
-      <h1 className="mb-6 text-3xl font-bold text-gray-100 text-center">Movie API</h1>
-
-      <Routes>
+    <Routes>
+      <Route path="/" element={<Layout />}>
         <Route
-          path="/"
+          index
           element={
             <>
               <MovieForm
@@ -73,9 +73,10 @@ function App() {
             </>
           }
         />
-        <Route path="/movies/:id" element={<MovieDetail />} />
-      </Routes>
-    </main>
+        <Route path="movies/:id" element={<MovieDetail />} />
+        <Route path="login" element={<Login />} />
+      </Route>
+    </Routes>
   )
 }
 
